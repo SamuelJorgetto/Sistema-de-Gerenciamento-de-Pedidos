@@ -1,0 +1,147 @@
+CREATE TABLE CLIENTES(
+ID_Cliente NUMBER PRIMARY KEY,
+    Nome VARCHAR(100),
+    Endereco VARCHAR(255),
+    Email VARCHAR(100),
+    Telefone VARCHAR(20)
+)
+
+INSERT INTO Clientes (ID_Cliente, Nome, Endereco, Email, Telefone) VALUES
+(1, 'João Silva', 'Rua A, 123', 'joao@email.com', '(00) 1234-5678');
+
+INSERT INTO Clientes (ID_Cliente, Nome, Endereco, Email, Telefone) VALUES
+(2, 'Maria Santos', 'Av. B, 456', 'maria@email.com', '(00) 9876-5432');
+
+INSERT INTO Clientes (ID_Cliente, Nome, Endereco, Email, Telefone) VALUES
+(3, 'Carlos Oliveira', 'Rua C, 789', 'carlos@email.com', '(00) 5555-5555');
+
+INSERT INTO Clientes (ID_Cliente, Nome, Endereco, Email, Telefone) VALUES
+(4, 'Ana Pereira', 'Av. D, 321', 'ana@email.com', '(00) 2222-3333');
+
+INSERT INTO Clientes (ID_Cliente, Nome, Endereco, Email, Telefone) VALUES
+(5, 'Pedro Souza', 'Rua E, 567', 'pedro@email.com', '(00) 7777-7777');
+
+INSERT INTO Clientes (ID_Cliente, Nome, Endereco, Email, Telefone) VALUES
+(6, 'Lúcia Fernandes', 'Av. F, 890', 'lucia@email.com', '(00) 4444-4444');
+
+INSERT INTO Clientes (ID_Cliente, Nome, Endereco, Email, Telefone) VALUES
+(7, 'Rafaela Lima', 'Rua G, 234', 'rafaela@email.com', '(00) 6666-6666');
+
+INSERT INTO Clientes (ID_Cliente, Nome, Endereco, Email, Telefone) VALUES
+(8, 'Daniel Gomes', 'Av. H, 876', 'daniel@email.com', '(00) 8888-8888');
+COMMIT;
+
+
+
+CREATE TABLE PEDIDOS(
+ ID_Pedido NUMBER PRIMARY KEY,
+    ID_Cliente NUMBER,
+    Data_Pedido DATE,
+    Status_Pedido VARCHAR(50),
+    Total DECIMAL(10, 2),
+    FOREIGN KEY (ID_Cliente) REFERENCES Clientes(ID_Cliente)
+)
+
+INSERT INTO Pedidos (ID_Pedido, ID_Cliente, Data_Pedido, Status_Pedido, Total) VALUES
+(101, 1, TO_DATE('2023-01-15', 'YYYY-MM-DD'), 'Em andamento', 150.00);
+
+INSERT INTO Pedidos (ID_Pedido, ID_Cliente, Data_Pedido, Status_Pedido, Total) VALUES
+(102, 2, TO_DATE('2023-02-20', 'YYYY-MM-DD'), 'Concluído', 75.50);
+
+INSERT INTO Pedidos (ID_Pedido, ID_Cliente, Data_Pedido, Status_Pedido, Total) VALUES
+(103, 3, TO_DATE('2023-03-10', 'YYYY-MM-DD'), 'Em andamento', 200.00);
+
+INSERT INTO Pedidos (ID_Pedido, ID_Cliente, Data_Pedido, Status_Pedido, Total) VALUES
+(104, 4, TO_DATE('2023-04-05', 'YYYY-MM-DD'), 'Pendente', 300.75);
+
+INSERT INTO Pedidos (ID_Pedido, ID_Cliente, Data_Pedido, Status_Pedido, Total) VALUES
+(105, 5, TO_DATE('2023-05-20', 'YYYY-MM-DD'), 'Em andamento', 100.00);
+
+INSERT INTO Pedidos (ID_Pedido, ID_Cliente, Data_Pedido, Status_Pedido, Total) VALUES
+(106, 6, TO_DATE('2023-06-15', 'YYYY-MM-DD'), 'Concluído', 180.25);
+
+INSERT INTO Pedidos (ID_Pedido, ID_Cliente, Data_Pedido, Status_Pedido, Total) VALUES
+(107, 7, TO_DATE('2023-07-03', 'YYYY-MM-DD'), 'Em andamento', 250.50);
+
+INSERT INTO Pedidos (ID_Pedido, ID_Cliente, Data_Pedido, Status_Pedido, Total) VALUES
+(108, 8, TO_DATE('2023-08-18', 'YYYY-MM-DD'), 'Pendente', 175.75);
+COMMIT;
+
+
+-- PROCEDURES
+CREATE OR REPLACE PROCEDURE Inserir_Pedidos(
+    p_ID_Cliente IN NUMBER,
+    p_Data_Pedido IN DATE,
+    p_Status_Pedido IN VARCHAR2,
+    p_Total IN NUMBER
+)
+
+IS 
+BEGIN 
+      INSERT INTO Pedidos (ID_Pedido, ID_Cliente, Data_Pedido, Status_Pedido, Total)
+    VALUES (SEQ_PEDIDOS.NEXTVAL, p_ID_Cliente, p_Data_Pedido, p_Status_Pedido, p_Total);
+    COMMIT;
+END;
+
+BEGIN
+    InserirPedido(1, TO_DATE('2022-12-19', 'YYYY-MM-DD'), 'Em andamento', 174.00);
+END;
+
+
+--TRIGGER
+CREATE OR REPLACE TRIGGER Calcular_Total_Pedidos
+AFTER INSERT ON Pedidos
+BEGIN
+    UPDATE Clientes
+    SET TotalPedidos = (
+    SELECT NVL(SUM(Total),0)
+    FROM Pedidos
+    WHERE ID_Cliente = :NEW.ID_Cliente
+)
+WHERE ID_Cliente = :NEW.ID_Cliente;
+END;
+
+INSERT INTO Pedidos (ID_Pedido, ID_Cliente, Data_Pedido, Status_Pedido, Total)
+VALUES (109, 1, TO_DATE('2023-11-27', 'YYYY-MM-DD'), 'Em andamento', 75.00);
+
+
+-- VIEW
+CREATE OR REPLACE VIEW Pedidos_Clientes as 
+SELECT 
+     c.ID_Cliente,
+    c.Nome AS Nome_Cliente,
+    p.ID_Pedido,
+    p.Data_Pedido,
+    p.Status_Pedido,
+    p.Total
+FROM Clientes c 
+JOIN PEDIDOS P ON 
+C.ID_CLiente = P.ID_Cliente;
+
+
+-- Consulta Join
+SELECT 
+*
+FROM CLientes c
+INNER JOIN Pedidos p on 
+C.ID_Clientes = P.ID_Pedidos
+WHERE DATA_PEDIDO =  TRUNC (SYSDATE , 'MM')
+;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
