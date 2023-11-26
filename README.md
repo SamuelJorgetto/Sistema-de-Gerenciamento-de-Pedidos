@@ -58,3 +58,5 @@ Uma consulta JOIN foi realizada para mostrar os clientes que fizeram pedidos no 
 Este sistema é um exemplo básico de um sistema de gerenciamento de clientes e pedidos. Pode ser expandido e aprimorado conforme necessário para atender a requisitos específicos do usuário.
 
 ![image](https://github.com/SamuelJorgetto/Sistema-de-Gerenciamento-de-Pedidos/assets/144075081/70aababf-feb2-4253-b5dc-0e98c3fd7222)
+![image](https://github.com/SamuelJorgetto/Sistema-de-Gerenciamento-de-Pedidos/assets/144075081/25348efd-41cf-4d64-94e2-d36076578807)
+
